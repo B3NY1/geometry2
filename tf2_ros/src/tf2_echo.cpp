@@ -116,40 +116,37 @@ int main(int argc, char ** argv)
   //Nothing needs to be done except wait for a quit
   //The callbacks withing the listener class
   //will take care of everything
-  while(rclcpp::ok())
-    {
-      try
-      {
-        geometry_msgs::msg::TransformStamped echo_transform;
-        echo_transform = echoListener.buffer_.lookupTransform(source_frameid, target_frameid, tf2::TimePoint());
-        std::cout.precision(3);
-        std::cout.setf(std::ios::fixed,std::ios::floatfield);
-        std::cout << "At time " << echo_transform.header.stamp.sec << "." << echo_transform.header.stamp.nanosec << std::endl;
-        //double yaw, pitch, roll;
-        //echo_transform.getBasis().getRPY(roll, pitch, yaw);
-        //tf::Quaternion q = echo_transform.getRotation();
-        //tf::Vector3 v = echo_transform.getOrigin();
-        auto translation = echo_transform.transform.translation;
-        auto rotation = echo_transform.transform.rotation;
-        std::cout << "- Translation: [" << translation.x << ", " << translation.y << ", " << translation.z << "]" << std::endl;
-        std::cout << "- Rotation: in Quaternion [" << rotation.x << ", " << rotation.y << ", " 
-                  << rotation.z << ", " << rotation.w << "]" << std::endl;
-                  //TODO(tfoote) restory rpy
-                  // << "            in RPY (radian) [" <<  roll << ", " << pitch << ", " << yaw << "]" << std::endl
-                  // << "            in RPY (degree) [" <<  roll*180.0/M_PI << ", " << pitch*180.0/M_PI << ", " << yaw*180.0/M_PI << "]" << std::endl;
+  try
+  {
+    geometry_msgs::msg::TransformStamped echo_transform;
+    echo_transform = echoListener.buffer_.lookupTransform(source_frameid, target_frameid, tf2::TimePoint());
+    std::cout.precision(3);
+    std::cout.setf(std::ios::fixed,std::ios::floatfield);
+    std::cout << "At time " << echo_transform.header.stamp.sec << "." << echo_transform.header.stamp.nanosec << std::endl;
+    //double yaw, pitch, roll;
+    //echo_transform.getBasis().getRPY(roll, pitch, yaw);
+    //tf::Quaternion q = echo_transform.getRotation();
+    //tf::Vector3 v = echo_transform.getOrigin();
+    auto translation = echo_transform.transform.translation;
+    auto rotation = echo_transform.transform.rotation;
+    std::cout << "- Translation: [" << translation.x << ", " << translation.y << ", " << translation.z << "]" << std::endl;
+    std::cout << "- Rotation: in Quaternion [" << rotation.x << ", " << rotation.y << ", " 
+              << rotation.z << ", " << rotation.w << "]" << std::endl;
+              //TODO(tfoote) restory rpy
+              // << "            in RPY (radian) [" <<  roll << ", " << pitch << ", " << yaw << "]" << std::endl
+              // << "            in RPY (degree) [" <<  roll*180.0/M_PI << ", " << pitch*180.0/M_PI << ", " << yaw*180.0/M_PI << "]" << std::endl;
 
-        //print transform
-      }
-      catch(tf2::TransformException& ex)
-      {
-        std::cout << "Failure at "<< clock->now().seconds() << std::endl;
-        std::cout << "Exception thrown:" << ex.what()<< std::endl;
-        std::cout << "The current list of frames is:" <<std::endl;
-        std::cout << echoListener.buffer_.allFramesAsString()<<std::endl;
-        
-      }
-      rate.sleep();
-    }
+    //print transform
+  }
+  catch(tf2::TransformException& ex)
+  {
+    std::cout << "Failure at "<< clock->now().seconds() << std::endl;
+    std::cout << "Exception thrown:" << ex.what()<< std::endl;
+    std::cout << "The current list of frames is:" <<std::endl;
+    std::cout << echoListener.buffer_.allFramesAsString()<<std::endl;
+    
+  }
+  
 
   return 0;
 }
