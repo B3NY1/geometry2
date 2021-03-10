@@ -108,9 +108,9 @@ int main(int argc, char ** argv)
   while (rclcpp::ok() && !echoListener.buffer_.canTransform(
     source_frameid, target_frameid, tf2::TimePoint(), &warning_msg))
   {
-    RCLCPP_INFO_THROTTLE(nh->get_logger(), *clock, 1000, "Waiting for transform %s ->  %s: %s",
-      source_frameid.c_str(), target_frameid.c_str(), warning_msg.c_str());
-    rate.sleep();
+    //RCLCPP_INFO_THROTTLE(nh->get_logger(), *clock, 1000, "Waiting for transform %s ->  %s: %s",
+    //  source_frameid.c_str(), target_frameid.c_str(), warning_msg.c_str());
+    //rate.sleep();
   }
 
   //Nothing needs to be done except wait for a quit
@@ -122,16 +122,16 @@ int main(int argc, char ** argv)
     echo_transform = echoListener.buffer_.lookupTransform(source_frameid, target_frameid, tf2::TimePoint());
     std::cout.precision(3);
     std::cout.setf(std::ios::fixed,std::ios::floatfield);
-    std::cout << "At time " << echo_transform.header.stamp.sec << "." << echo_transform.header.stamp.nanosec << std::endl;
+    std::cout << "Time: " << echo_transform.header.stamp.sec << ' ' <<std::endl;
     //double yaw, pitch, roll;
     //echo_transform.getBasis().getRPY(roll, pitch, yaw);
     //tf::Quaternion q = echo_transform.getRotation();
     //tf::Vector3 v = echo_transform.getOrigin();
     auto translation = echo_transform.transform.translation;
     auto rotation = echo_transform.transform.rotation;
-    std::cout << "- Translation: [" << translation.x << ", " << translation.y << ", " << translation.z << "]" << std::endl;
-    std::cout << "- Rotation: in Quaternion [" << rotation.x << ", " << rotation.y << ", " 
-              << rotation.z << ", " << rotation.w << "]" << std::endl;
+    std::cout << "Translation: " << translation.x << " " << translation.y << " " << translation.z << " " << std::endl;
+    std::cout << "Rotation: " << rotation.x << " " << rotation.y << " " 
+              << rotation.z << " " << rotation.w << " " << std::endl;
               //TODO(tfoote) restory rpy
               // << "            in RPY (radian) [" <<  roll << ", " << pitch << ", " << yaw << "]" << std::endl
               // << "            in RPY (degree) [" <<  roll*180.0/M_PI << ", " << pitch*180.0/M_PI << ", " << yaw*180.0/M_PI << "]" << std::endl;
